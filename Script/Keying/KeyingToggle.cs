@@ -7,7 +7,7 @@ public class KeyingToggle : MonoBehaviour {
 
     [Header("Keying Material")]
     public Material keyingMaterial;
-    public string propertyName;
+    public string propertyName = "_KEYING";
 
     [Header("Optional - Default Setting")]
     public bool defaultValue;
