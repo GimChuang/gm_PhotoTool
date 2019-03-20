@@ -11,7 +11,7 @@ public class PhotoAnimController : MonoBehaviour
     public Transform[] countDownElements;
     Text[] txt_countDownTexts;
     //Image[] img_countDownTexts;
-    Color color_countDownText;
+    [SerializeField]Color color_countDownText;
     Color color_countDownText_transparent;
 
     Sequence tweenSeq_countDown;
@@ -38,9 +38,9 @@ public class PhotoAnimController : MonoBehaviour
 
         #region SETUP_COUNTDOWN_ANIM
         // Set up the texts' color
-        if(countDownElements[0].gameObject.GetComponent<Text>() != null)
+        if (countDownElements[0].gameObject.GetComponent<Text>() != null)
             color_countDownText = countDownElements[0].gameObject.GetComponent<Text>().color;
-        else if(countDownElements[0].gameObject.GetComponent<Image>() != null)
+        else if (countDownElements[0].gameObject.GetComponent<Image>() != null)
             color_countDownText = countDownElements[0].gameObject.GetComponent<Image>().color;
 
         color_countDownText_transparent = new Color(color_countDownText.r, color_countDownText.g, color_countDownText.b, 0f);
@@ -57,50 +57,23 @@ public class PhotoAnimController : MonoBehaviour
             //img_countDownTexts[i].color = color_countDownText_transparent;
         }
 
-        /*
-        if (img_shot)
-        {
-            // Hide the shot image
-            Color temp = img_shot.color;
-            img_shot.color = new Color(temp.r, temp.g, temp.b, 0);
-        }
-        else
-            Debug.LogWarning("img_shot is not assigned!!");
-        */
-
         DOTween.Init(true, true, LogBehaviour.ErrorsOnly);
 
         tweenSeq_countDown = DOTween.Sequence().SetAutoKill(false).Pause();
 
         for (int i = 0; i < countDownElements.Length; i++)
         {
+            tweenSeq_countDown.Append(txt_countDownTexts[i].DOColor(color_countDownText_transparent, 0f)); // Set to transparent
             tweenSeq_countDown.Append(txt_countDownTexts[i].DOColor(color_countDownText, 0f)); // Set to full opacity
-            //tweenSeq_countDown.Append(img_countDownTexts[i].DOColor(color_countDownText, 0f)); // Set to full opacity
             //Debug.LogWarning("COLOR: " + i);
             tweenSeq_countDown.Append(countDownElements[i].DOScale(0f, duration_countDown).SetEase(Ease.InSine)); // DOScale
             //Debug.LogWarning("SCALE: " + i);
-            tweenSeq_countDown.Join(txt_countDownTexts[i].DOColor(color_countDownText_transparent, 0f)); // Set to transparent
-            //tweenSeq_countDown.Join(img_countDownTexts[i].DOColor(color_countDownText_transparent, 0f)); // Set to transparent
+            tweenSeq_countDown.Join(txt_countDownTexts[i].DOColor(color_countDownText_transparent, duration_countDown)); // Set to transparent
             //Debug.LogWarning("COLOR2: " + i);
         }
 
         // CountDownFinish callback here
         tweenSeq_countDown.AppendCallback(() => Callback_CountDownFinish());
-
-        /*
-        // Play shot audio
-        if (audio_shot != null)
-            tweenSeq_countDown.AppendCallback(() => audio_shot.Play());
-        
-        if (img_shot)
-        {
-            tweenSeq_countDown.Append(img_shot.DOFade(1f, 0.01f)); // Set to full opacity
-            tweenSeq_countDown.Append(img_shot.DOFade(0f, duration_shot).SetEase(Ease.OutSine)); //DoFade
-
-            // ShotFinish callback here
-            tweenSeq_countDown.AppendCallback(() => Callback_ShotFinish());
-        }     
-        */
 
         #endregion SETUP_COUNTDOWN_ANIM
 
@@ -142,4 +115,5 @@ public class PhotoAnimController : MonoBehaviour
         tweenSeq_shot.Restart();
     }
 
+   
 }
