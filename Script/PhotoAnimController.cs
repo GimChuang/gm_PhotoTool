@@ -11,7 +11,7 @@ public class PhotoAnimController : MonoBehaviour
     public Transform[] countDownElements;
     Text[] txt_countDownTexts;
     //Image[] img_countDownTexts;
-    [SerializeField]Color color_countDownText;
+    Color color_countDownText;
     Color color_countDownText_transparent;
 
     Sequence tweenSeq_countDown;
