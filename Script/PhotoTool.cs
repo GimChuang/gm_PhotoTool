@@ -45,11 +45,27 @@ public class PhotoTool : MonoBehaviour
 
     public void TakePhoto()
     {
+        
+
         StartCoroutine(E_TakePhoto());
     }
 
     IEnumerator E_TakePhoto()
     {
+        #region Hide Debug Region If Needed
+
+        if (debugOnGUI)
+        {
+            debugOnGUI = false;
+            shouldTurnOnDebugOnGUI = true;
+        }
+        else
+        {
+            shouldTurnOnDebugOnGUI = false;
+        }
+
+        #endregion Hide Debug Region If Needed
+
         yield return new WaitForEndOfFrame();
 
         tex2d_photo = new Texture2D(width, height, TextureFormat.RGB24, false);
@@ -57,25 +73,26 @@ public class PhotoTool : MonoBehaviour
 
         tex2d_photo.ReadPixels(photoRegion, 0, 0);
         tex2d_photo.Apply();
-        /*
-        Debug.Log("photoRegion w: " + photoRegion.width);
-        Debug.Log("photoRegion h: " + photoRegion.height);
-        Debug.Log("photoRegion x: " + photoRegion.x);
-        Debug.Log("photoRegion y: " + photoRegion.y);
-        Debug.Log(tex2d_photo.width);
-        Debug.Log(tex2d_photo.height);
-        */
 
         if (OnPhotoTaken != null)
             OnPhotoTaken(tex2d_photo);
 
         Debug.Log("Photo taken!");
 
+        #region Turn On Debug Region If Needed
+
+        if (shouldTurnOnDebugOnGUI)
+        {
+            debugOnGUI = true;
+        }
+
+        #endregion Turn On Debug Region If Needed
     }
 
     #region Debug Region to take photo
 
     public bool debugOnGUI;
+    bool shouldTurnOnDebugOnGUI;
     public Texture debugRegionTex;
     public Color debugRegionColor = Color.white;
 
